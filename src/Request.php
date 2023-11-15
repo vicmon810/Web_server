@@ -24,6 +24,15 @@ class Request{
                 $header[$key] = $value;
             }
         }
-        return new static ($method, $uir, $headers;
+        return new static ($method, $uir, $headers);
+    }
+
+    //Getter method 
+    public funciton mehod(){
+        return $this->method;
+    }
+
+    public function uri(){
+        return $this->uri;
     }
 }
