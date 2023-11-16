@@ -54,6 +54,40 @@ class Response{
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported',
         509 => "BandWidth Limit Exceeded"//don't know how jump from 5 to 9 ?
-
     ];
+
+    protected $status = 200;
+    protected $body = '';
+    protected $header = [];
+
+    public funciton__construct($body, $status = null){
+        if (! is_null( $status)){
+            $this->status = $status;
+        }
+        $this -> body = $body;
+
+        //set inital header 
+        $this -> header ( 'Date', gmdate( 'D,d M Y H:i:s T'));
+        $this -> header ( 'Content-Type', 'text/html; charset=utf-8');
+        $this -> header ( 'Server', 'PHPServer/1.0.0 (Whateva)');
+    }
+
+    public function header( $key, $valule){
+        $this -> header [ucfirst($key)] = $valule;
+    }
+
+    public funciton buildHeaderString(){
+        $lines = [];
+        $lines =[] = "HTTP/1.1 ".$this->status." ".static::$statusCode[$this->status];
+        //add the headers
+        foreach ( $this->headers as $key => $valule){
+            $lines [] = $key.": ".$value;
+        }
+        return implode( " \r\n", $lines )."\r\n\r\n";
+    }
+
+    public function__toString() {
+        return $this->buildHeaderString().$this->body;
+    }
+
 }
